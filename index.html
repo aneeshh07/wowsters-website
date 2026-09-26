@@ -473,6 +473,69 @@
   }
 
 
+
+  /* =====================================================
+     3D LAYER: depth, tilt and perspective across the site
+     ===================================================== */
+  /* hero: layered depth that follows the pointer and tips back as you scroll */
+  .hero{perspective:1100px;perspective-origin:12% 85%}
+  .hero-inner{transform-style:preserve-3d;
+    transform:rotateX(var(--hry,0deg)) rotateY(var(--hrx,0deg)) translateZ(var(--hz,0px));
+    transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+  .hero-deva{translate:0 0 20px}
+  .hero h1{translate:0 0 55px}
+  .hero p{translate:0 0 30px}
+  .hero-cta{translate:0 0 80px;box-shadow:0 3px 0 rgba(241,160,196,.35),0 16px 28px -12px rgba(0,0,0,.7);
+    transition:background .3s,color .3s,translate .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s}
+  .hero-cta:hover{translate:0 -3px 95px;box-shadow:0 6px 0 rgba(241,160,196,.45),0 22px 34px -12px rgba(0,0,0,.75)}
+  .hero-img{transition:translate .8s cubic-bezier(.2,.7,.2,1)}
+  .petals{perspective:600px;transition:translate .6s cubic-bezier(.2,.7,.2,1)}
+  @media(max-width:600px){
+    .hero-deva{translate:0 0 6px}.hero h1{translate:0 0 18px}.hero p{translate:0 0 10px}
+    .hero-cta,.hero-cta:hover{translate:0 0 22px}}
+
+  /* carved, extruded headings */
+  .hero h1{text-shadow:0 1px 0 #3d2d55,0 2px 0 #362849,0 3px 0 #2f2341,0 4px 0 #291e39,0 14px 26px rgba(0,0,0,.5)}
+  h2{text-shadow:0 1px 0 #46345f,0 2px 0 #3b2c52,0 3px 0 #312545,0 10px 20px rgba(0,0,0,.35)}
+  .step .num,.fstat .big,.rev-stat .big{text-shadow:0 1px 0 #b0668d,0 2px 0 #8f4f73,0 3px 0 #6f3c5a,0 8px 14px rgba(0,0,0,.4)}
+
+  /* scroll reveals now swing up out of the page */
+  .js .reveal{transform:perspective(1000px) translate3d(0,46px,-70px) rotateX(16deg);transform-origin:50% 100%}
+  .js .reveal.from-left{transform:perspective(1000px) translate3d(-60px,0,-70px) rotateY(20deg)}
+  .js .reveal.from-right{transform:perspective(1000px) translate3d(60px,0,-70px) rotateY(-20deg)}
+  .js .tile.reveal:not(.in){transform:perspective(1000px) rotateX(18deg) translateZ(-50px)}
+  .js .ritual.reveal:not(.in){transform:perspective(900px) rotateY(-28deg) translateZ(-40px)}
+
+  /* tilt cards */
+  .t3d{position:relative;transform-style:preserve-3d}
+  .t3d:not(.reveal),.js .reveal.in.t3d{
+    transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateZ(var(--tz,0px))}
+  .js .reveal.in.t3d.settled{transition:opacity .9s,transform .7s cubic-bezier(.2,.7,.2,1),box-shadow .7s;transition-delay:0s}
+  .t3d.tilting{transition:transform .12s ease-out,box-shadow .2s !important;transition-delay:0s !important;z-index:5}
+  .t3d .glare{position:absolute;inset:0;z-index:4;pointer-events:none;opacity:0;transition:opacity .5s;
+    background:radial-gradient(circle at var(--gx,50%) var(--gy,50%),rgba(255,236,246,.2),transparent 58%);mix-blend-mode:screen}
+  .t3d.tilting .glare{opacity:1}
+  .ritual.t3d.tilting,.step.t3d.tilting,.rev-stat.t3d.tilting,.award.t3d.tilting,.studio.t3d.tilting{
+    box-shadow:calc(var(--sx,0) * -1px) calc(18px + var(--sy,0) * -1px) 40px -18px rgba(0,0,0,.7)}
+  .step.t3d{padding:1.2rem;margin:-1.2rem}
+
+  /* things that float above their card */
+  .step.t3d .num{translate:0 0 45px}
+  .step.t3d h3{translate:0 0 22px}
+  .rev-stat.t3d .big{translate:0 0 35px}
+  .rev-stat.t3d .stars{translate:0 0 20px}
+  .award.t3d .award-cert{translate:0 0 40px;box-shadow:0 20px 40px -20px rgba(0,0,0,.7)}
+  .award.t3d .award-copy{translate:0 0 18px}
+  .reel-frame.t3d video{translate:0 0 22px;box-shadow:0 18px 40px -16px rgba(0,0,0,.8)}
+  .reel-frame.t3d::after{transform:translateZ(36px)}
+  .reel-frame.t3d .reel-sound{translate:0 0 60px}
+  .reel-frame.t3d{box-shadow:calc(var(--sx,0) * -1px) calc(30px + var(--sy,0) * -1px) 80px -30px rgba(0,0,0,.75),0 0 0 6px rgba(241,160,196,.06)}
+
+  /* 3D press on the enquiry button */
+  .send{box-shadow:0 4px 0 #b0668d,0 12px 22px -10px rgba(0,0,0,.6);transition:background .3s,transform .15s,box-shadow .15s}
+  .send:hover{transform:translateY(-2px);box-shadow:0 6px 0 #b0668d,0 16px 26px -10px rgba(0,0,0,.65)}
+  .send:active{transform:translateY(3px);box-shadow:0 1px 0 #b0668d,0 6px 12px -8px rgba(0,0,0,.6)}
+
 </style>
 </head>
 <body>
@@ -1073,6 +1136,94 @@
     });
     slider.addEventListener('mouseenter', () => clearInterval(timer));
     slider.addEventListener('mouseleave', restart);
+  })();
+
+  /* ================= 3D layer ================= */
+  (function(){
+    const fine = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+    const hero = document.querySelector('.hero'), inner = document.querySelector('.hero-inner');
+    const heroImg = document.querySelector('.hero-img'), petals = document.querySelector('.petals');
+
+    /* hero: pointer parallax (desktop) + tip back on scroll (everywhere) */
+    let hx = 0, hy = 0;
+    function heroPaint(){
+      const y = window.scrollY, vh = window.innerHeight;
+      const s = Math.min(1, y / vh);
+      inner.style.setProperty('--hrx', (hx * 7).toFixed(2) + 'deg');
+      inner.style.setProperty('--hry', (-hy * 6 + s * 14).toFixed(2) + 'deg');
+      inner.style.setProperty('--hz', (-s * 120).toFixed(0) + 'px');
+      heroImg.style.translate = (-hx * 18).toFixed(1) + 'px ' + (-hy * 12).toFixed(1) + 'px';
+      petals.style.translate = (hx * 30).toFixed(1) + 'px ' + (hy * 20).toFixed(1) + 'px';
+    }
+    if (fine){
+      hero.addEventListener('pointermove', e => {
+        const r = hero.getBoundingClientRect();
+        hx = (e.clientX - r.left) / r.width - .5; hy = (e.clientY - r.top) / r.height - .5;
+        requestAnimationFrame(heroPaint);
+      });
+      hero.addEventListener('pointerleave', () => { hx = hy = 0; requestAnimationFrame(heroPaint); });
+    }
+
+    /* tilt cards */
+    const cards = [...document.querySelectorAll('.ritual, .step, .rev-stat, .award, .founder-photo, .reel-frame, .tile, .slider, .studio')];
+    const state = new Map();
+    cards.forEach(el => {
+      el.classList.add('t3d');
+      const g = document.createElement('span'); g.className = 'glare'; g.setAttribute('aria-hidden','true'); el.appendChild(g);
+      state.set(el, {px:0, py:0, sp:0});
+      /* once the swing-in reveal is done, drop its delay so the tilt feels instant */
+      el.addEventListener('transitionend', e => {
+        if (e.target === el && e.propertyName === 'transform' && el.classList.contains('in')) el.classList.add('settled');
+      });
+      if (!el.classList.contains('reveal')) el.classList.add('settled');
+    });
+    const big = el => el.matches('.award, .slider, .studio, .founder-photo');
+    function paint(el){
+      const s = state.get(el), k = big(el) ? .45 : 1;
+      const rx = (-s.py * 14 * k) + s.sp, ry = s.px * 16 * k;
+      el.style.setProperty('--rx', rx.toFixed(2) + 'deg');
+      el.style.setProperty('--ry', ry.toFixed(2) + 'deg');
+      el.style.setProperty('--sx', (ry * 1.4).toFixed(1));
+      el.style.setProperty('--sy', (-rx * 1.4).toFixed(1));
+    }
+    if (fine){
+      cards.forEach(el => {
+        const s = state.get(el);
+        el.addEventListener('pointerenter', () => { if (el.classList.contains('in')) el.classList.add('settled'); el.classList.add('tilting'); el.style.setProperty('--tz', big(el) ? '10px' : '24px'); });
+        el.addEventListener('pointermove', e => {
+          const r = el.getBoundingClientRect();
+          s.px = (e.clientX - r.left) / r.width - .5; s.py = (e.clientY - r.top) / r.height - .5;
+          el.style.setProperty('--gx', ((s.px + .5) * 100).toFixed(1) + '%');
+          el.style.setProperty('--gy', ((s.py + .5) * 100).toFixed(1) + '%');
+          requestAnimationFrame(() => paint(el));
+        });
+        el.addEventListener('pointerleave', () => {
+          el.classList.remove('tilting'); s.px = s.py = 0; el.style.setProperty('--tz', '0px'); paint(el);
+        });
+      });
+    }
+
+    /* scroll-linked tilt: cards lean as they travel through the screen (stronger on phones) */
+    const amt = fine ? 4 : 8;
+    const visible = new Set();
+    const vis = new IntersectionObserver(es => es.forEach(e => e.isIntersecting ? visible.add(e.target) : visible.delete(e.target)));
+    cards.forEach(el => vis.observe(el));
+    let tick = false;
+    function onScroll(){
+      heroPaint();
+      const vh = window.innerHeight;
+      visible.forEach(el => {
+        if (el.classList.contains('tilting')) return;
+        const r = el.getBoundingClientRect();
+        const p = Math.max(-1, Math.min(1, ((r.top + r.height / 2) - vh / 2) / (vh / 2)));
+        state.get(el).sp = p * amt * (big(el) ? .5 : 1);
+        paint(el);
+      });
+      tick = false;
+    }
+    window.addEventListener('scroll', () => { if (!tick){ tick = true; requestAnimationFrame(onScroll); } }, {passive:true});
+    window.addEventListener('resize', onScroll);
+    onScroll();
   })();
 </script>
 </body>

@@ -1375,7 +1375,11 @@
         form.reset();
         show('Received — we reply within two days, always personally.');
       } catch (err) {
-        show('Your note didn’t go through. Please try again, or write to info@wowstersplanners.in or WhatsApp +91 98158 67030.', true);
+        console.warn('FormSubmit:', err);
+        const why = /activat/i.test(err.message || '')
+          ? ' (This form is waiting for activation: check info@wowstersplanners.in for the FormSubmit email.)'
+          : (location.protocol === 'file:' ? ' (The form only sends from the live website, not from a file opened on your computer.)' : '');
+        show('Your note didn’t go through. Please try again, or write to info@wowstersplanners.in or WhatsApp +91 98158 67030.' + why, true);
       } finally {
         btn.disabled = false; btn.textContent = label;
       }
